@@ -1,0 +1,16 @@
+version: '2'
+services:
+    businessprocess-mongodb:
+        image: mongo:3.6.3
+        ports:
+            - "27017:27017"
+        command: mongos --configdb businessprocess-mongodb-config
+    businessprocess-mongodb-node:
+        build:
+            context: .
+            dockerfile: mongodb/MongoDB.Dockerfile
+        command: mongod --replSet rs1 --noprealloc --smallfiles
+    businessprocess-mongodb-config:
+        image: mongo:3.6.3
+        container_name: businessprocess-mongodb-config
+        command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
